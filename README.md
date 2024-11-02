@@ -17,3 +17,6 @@ Tenho lido muitas notícias no celular e o design, as funções e a composição
 * Mobile Share Header
 * Mobile Navbar
 * Desktop Fixed Share Navbar
+
+## Next Steps
+* Clone pessoal do Calc4Devs
