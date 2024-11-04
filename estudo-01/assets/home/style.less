@@ -1,7 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 @font-face {
     font-family: 'Planta';
     src: url(planta.otf);
 }
+
+@color: #D06A7B;
 
 body {
     background-image: url(background.jpeg);
@@ -67,7 +71,7 @@ body {
             margin-left: auto;
             max-width: fit-content;
             border-left: 2px solid black;
-            border-right: 48px solid black;
+            border-right: 2px solid black;
             border-top: 2px solid black;
             border-bottom: 2px solid black;
             text-transform: uppercase;
@@ -105,8 +109,119 @@ body {
         }
     }
 
+    .projects {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+
+        grid-template-areas:
+            "pmv pmt pdv pdv"
+            "pmv pmt pdt pdt"
+            "csb msh mnb dsn"
+        ;
+
+        .pmv {
+            grid-area: pmv;
+        }
+
+        .pmt {
+            grid-area: pmt;
+        }
+
+        .csb {
+            grid-area: csb;
+        }
+
+        .pdv {
+            grid-area: pdv;
+        }
+
+        .pdt {
+            grid-area: pdt;
+        }
+
+        .msh {
+            grid-area: msh;
+        }
+
+        .mnb {
+            grid-area: mnb;
+        }
+
+        .dsn {
+            grid-area: dsn;
+        }
+
+        .project {
+            padding: 12px;
+            border: 2px solid black;
+            background-color: white;
+            box-shadow: 6px 6px 0 0 black;
+            text-align: center;
+            text-decoration: none;
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .cover {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+                display: block;
+            }
+
+            .tag,
+            .name {
+                text-transform: uppercase;
+            }
+
+            .name {
+                color: black;
+                font-size: 18px;
+                letter-spacing: 1px;
+            }
+
+            .tag,
+            .description {
+                color: gray;
+                font-family: 'Roboto', sans-serif;
+                font-size: 14px;
+            }
+
+            .description {
+                font-size: 12px;
+            }
+
+            &.pdv,
+            &.pdt {
+                display: flex;
+                flex-direction: row;
+                gap: 24px;
+                text-align: left;
+
+                .cover {
+                    width: 160px;
+                    flex-shrink: 0;
+                }
+
+                .info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+            }
+        }
+    }
+
     .home__footer {
         padding: 24px;
         border: 2px solid black;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        background-color: white;
+        box-shadow: 12px 12px 0 0 black;
+        margin-bottom: 100px;
     }
 }

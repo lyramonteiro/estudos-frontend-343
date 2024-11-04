@@ -3,5 +3,6 @@
         "mobile-placeholder": "mobile",
         "desktop-placeholder": "desktop",
         "estudo-01": "content"
-    }
+    },
+    "liveServer.settings.port": 5501
 }
