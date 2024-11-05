@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Three.js Básico</title>
+    <!-- Import map para Three.js -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.170.0/three.module.min.js"
+      }
+    }
+  </script>
+
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="meuCanvas"></canvas>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // 1. Configurar Cena
+        const scene = new THREE.Scene();
+
+        // 2. Configurar Câmera
+        const camera = new THREE.PerspectiveCamera(75, 1200 / 800, 0.1, 1000);
+        camera.position.z = 5;
+
+        // 3. Configurar Renderizador
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('meuCanvas') });
+
+        // Definindo tamanhos específicos para os dois modos de tela
+        const largeViewport = { width: 1200, height: 700 };
+        const smallViewport = { width: 360, height: 600 };
+
+        // Função para ajustar tamanho do renderizador com base na largura da viewport
+        function ajustarTamanhoRenderizador() {
+            const larguraViewport = window.innerWidth;
+            if (larguraViewport <= 375) {
+                // Para viewports pequenas
+                renderer.setSize(smallViewport.width, smallViewport.height);
+                camera.aspect = smallViewport.width / smallViewport.height;
+            } else {
+                // Para viewports grandes
+                renderer.setSize(largeViewport.width, largeViewport.height);
+                camera.aspect = largeViewport.width / largeViewport.height;
+            }
+            camera.updateProjectionMatrix();
+        }
+
+        // Chamando a função para configurar o tamanho inicial
+        ajustarTamanhoRenderizador();
+
+        // 4. Criar um Cubo
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        // 5. Função de Animação
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotação do Cubo
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        // Iniciar Animação
+        animate();
+
+        // Ajustar renderização ao redimensionar a janela
+        window.addEventListener('resize', ajustarTamanhoRenderizador);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Three.js Básico</title>
+    <!-- Import map para Three.js -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.170.0/three.module.min.js"
+      }
+    }
+  </script>
+
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: gray;
+
+            #canvasTeste {
+                width: 278px;
+                height: 368px;
+                margin-top: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvasTeste"></canvas>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // Dimensões fixas da carta em pixels
+        const canvasWidth = 278;
+        const canvasHeight = 368;
+
+        // 1. Configurar Cena
+        const scene = new THREE.Scene();
+
+        // 2. Configurar Câmera Ortográfica para encaixar na área de exibição e ajustar os limites da câmera com base no tamanho do card e na margem necessária
+        const margin = 50; // Uma margem extra para garantir que o card caiba ao girar
+
+        const camera = new THREE.OrthographicCamera(
+            (canvasWidth + margin) / -2, (canvasWidth + margin) / 2,
+            (canvasHeight + margin) / 2, (canvasHeight + margin) / -2,
+            0.1, 1000
+        );
+
+        // Mover a câmera um pouco mais para trás
+        camera.position.z = 500;
+        camera.lookAt(0, 0, 0); // Certifique-se de que ela está olhando para o centro da cena
+
+
+        // 3. Configurar Renderizador com background transparente
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('canvasTeste'),
+            alpha: true
+        });
+        renderer.setSize(canvasWidth, canvasHeight);
+        renderer.setClearColor(0x000000, 0);
+
+        // 4. Carregar Texturas para a Frente e o Verso da Carta
+        const loader = new THREE.TextureLoader();
+        const frontTexture = loader.load('card-front.png'); // Substitua pela URL da imagem da frente
+        const backTexture = loader.load('card-back.png');   // Substitua pela URL da imagem do verso
+
+        // Configurar espelhamento vertical para a textura do verso
+        backTexture.wrapS = THREE.MirroredRepeatWrapping;
+        backTexture.repeat.x = -1; // Espelha verticalmente
+        backTexture.center.set(0.5, 0.5);
+        backTexture.needsUpdate = true; // Força a atualização da textura
+
+        frontTexture.generateMipmaps = false; // Desativa o mipmap para melhor resolução
+        backTexture.generateMipmaps = false; // Desativa o mipmap para melhor resolução
+        frontTexture.minFilter = THREE.LinearFilter; // Define o filtro mínimo sem mipmaps
+        backTexture.minFilter = THREE.LinearFilter; // Define o filtro mínimo sem mipmaps
+
+        // 5. Criar Geometria da Carta
+        const cardWidth = canvasWidth;   // Largura da carta
+        const cardHeight = canvasHeight;  // Altura da carta
+        const geometry = new THREE.PlaneGeometry(cardWidth, cardHeight);
+
+        // 6. Materiais com Texturas para os Dois Lados
+        const frontMaterial = new THREE.MeshBasicMaterial({
+            map: frontTexture,
+            side: THREE.FrontSide,
+            transparent: true,
+            premultipliedAlpha: true // Ativando o premultipliedAlpha para evitar bordas pretas
+        });
+        const backMaterial = new THREE.MeshBasicMaterial({
+            map: backTexture,
+            side: THREE.BackSide,
+            transparent: true,
+            premultipliedAlpha: true // Ativando o premultipliedAlpha para evitar bordas pretas
+        });
+
+        // Criando a carta com os dois lados
+        const front = new THREE.Mesh(geometry, frontMaterial);
+        const back = new THREE.Mesh(geometry, backMaterial);
+
+        // Adicionar os dois lados à cena
+        scene.add(front);
+        scene.add(back);
+
+        // Ajustando a posição para que os dois lados fiquem sobrepostos
+        front.position.z = 0.01;  // Frente um pouco à frente do verso
+        back.position.z = -0.01;  // Verso um pouco atrás da frente
+
+        // 7. Função de Animação
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotação vertical da carta (eixo Y)
+            front.rotation.y += 0.01;
+            back.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        // Iniciar Animação
+        animate();
+    </script>
+</body>
+
+</html>

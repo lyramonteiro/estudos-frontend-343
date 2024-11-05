@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Three.js Básico</title>
+    <!-- Import map para Three.js -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.170.0/three.module.min.js"
+      }
+    }
+  </script>
+
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            #canvasTeste {
+                border: 1px solid black;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvasTeste"></canvas>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // 1. Configurar Cena
+        const scene = new THREE.Scene();
+
+        // 2. Configurar Câmera
+        const camera = new THREE.PerspectiveCamera(75, 1200 / 800, 0.1, 1000);
+        camera.position.z = 3;
+
+        // 3. Configurar Renderizador
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('canvasTeste'),
+            alpha: true // Ativa a transparência no background
+        });
+        renderer.setClearColor(0x000000, 0); //O segundo parâmetro é a opacidade (0 = totalmente transparente)
+
+        // Definindo tamanhos específicos para os dois modos de tela
+        const largeViewport = { width: 200, height: 200 };
+        const smallViewport = { width: 200, height: 200 };
+
+        // Função para ajustar tamanho do renderizador com base na largura da viewport
+        function ajustarTamanhoRenderizador() {
+            const larguraViewport = window.innerWidth;
+            if (larguraViewport <= 375) {
+                // Para viewports pequenas
+                renderer.setSize(smallViewport.width, smallViewport.height);
+                camera.aspect = smallViewport.width / smallViewport.height;
+            } else {
+                // Para viewports grandes
+                renderer.setSize(largeViewport.width, largeViewport.height);
+                camera.aspect = largeViewport.width / largeViewport.height;
+            }
+            camera.updateProjectionMatrix();
+        }
+
+        // Chamando a função para configurar o tamanho inicial
+        ajustarTamanhoRenderizador();
+
+        // 4. Criar Geometria da Carta
+        const cardWidth = 2;   // Largura da carta
+        const cardHeight = 3;  // Altura da carta
+        const geometry = new THREE.PlaneGeometry(cardWidth, cardHeight);
+
+        // 5. Material para os Dois Lados
+        const frontMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.FrontSide }); // Frente verde
+        const backMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.BackSide });   // Verso vermelho
+
+        // Criando a carta com os dois lados
+        const front = new THREE.Mesh(geometry, frontMaterial);
+        const back = new THREE.Mesh(geometry, backMaterial);
+
+        // Adiciona os dois lados à cena
+        scene.add(front);
+        scene.add(back);
+
+        // Ajustando a posição para que os dois lados fiquem sobrepostos
+        front.position.z = 0.01;  // Frente um pouco à frente do verso
+        back.position.z = -0.01;  // Verso um pouco atrás da frente
+
+        // 6. Função de Animação
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotação da carta
+            front.rotation.y += 0.01;
+            back.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        // Iniciar Animação
+        animate();
+
+        // Ajustar renderização ao redimensionar a janela
+        window.addEventListener('resize', ajustarTamanhoRenderizador);
+    </script>
+</body>
+
+</html>
