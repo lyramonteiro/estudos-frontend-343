@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="splide-core.min.css">
+    <link rel="stylesheet" href="thumbnails-1.css">
+    <script src="splide.min.js"></script>
+</head>
+
+<body>
+
+    <div class="grid">
+        <div class="wrapper">
+            <section class="splide splide__products" aria-label="">
+                <div class="splide__track">
+                    <div class="splide__list">
+                        <div class="splide__slide">
+                            <img src="01.jpg" alt="">
+                        </div>
+                        <div class="splide__slide">
+                            <img src="02.jpg" alt="">
+                        </div>
+                        <div class="splide__slide">
+                            <img src="03.jpg" alt="">
+                        </div>
+                        <div class="splide__slide">
+                            <img src="04.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <nav class="splide__products__thumbnails">
+                <div class="thumbnails">
+                    <img src="01.jpg" alt="">
+                </div>
+                <div class="thumbnails">
+                    <img src="02.jpg" alt="">
+                </div>
+                <div class="thumbnails">
+                    <img src="03.jpg" alt="">
+                </div>
+                <div class="thumbnails">
+                    <img src="04.jpg" alt="">
+                </div>
+            </nav>
+        </div>
+        <div class="contents">
+            <header>
+                <p>SPLIDE.JS</p>
+                <h1>Teste da lib Splide.js para Carousel com Thumbs</h1>
+            </header>
+            <p>🔵 Leve de usar em comparação com Swiper.</p>
+            <p>🔵 Super customizável com CSS.</p>
+            <p>🔵 Bem documentado.</p>
+            <p>🔵 Fácil de manipular com JavaScript.</p>
+            <p>🔵 MENOS MENOS MENOS código.</p>
+            <p>🔵 Não surta com display: grid.</p>
+            <p>🔵 Bem menos Stranger Bugs.</p>
+        </div>
+    </div>
+
+    <script>
+        const splideProducts = new Splide('.splide__products', {
+            pagination: false,
+            rewind: true,
+            gap: 16,
+        }).mount();
+
+        const thumbnails = document.querySelectorAll('.thumbnails');
+
+        thumbnails.forEach(function (thumbnail, index) {
+            thumbnail.addEventListener('click', function () {
+                splideProducts.go(index);
+            });
+        });
+
+        let current = '';
+
+        splideProducts.on('move', function () {
+            if (current) {
+                current.classList.remove('is-active');
+            }
+            let thumbnail = thumbnails[splideProducts.index];
+            if (thumbnail) {
+                thumbnail.classList.add('is-active');
+                current = thumbnail;
+            }
+        });
+    </script>
+</body>
+
+</html>
