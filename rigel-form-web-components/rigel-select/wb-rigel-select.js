@@ -1,5 +1,5 @@
 // ! Rigel Select Web Component
-// ! Version: 1.0.0
+// ! Version: 1.1.0
 
 class RigelSelect extends HTMLElement {
     constructor() {
@@ -16,14 +16,12 @@ class RigelSelect extends HTMLElement {
         this.shadowRoot.innerHTML = `
         <div class="rigelwbc-select">
             <div class="select--trigger" part="trigger"></div>
-            <div class="select--list">
-                <slot></slot>
-            </div>
+            <div class="select--list"></div>
         </div>
         `;
 
         // Adiciona o CSS ao Shadow DOM
-        this.shadowRoot.appendChild(link);
+        this.shadowRoot.appendChild(cssLink);
 
         // Elementos do componente
         this.rigelSelectTrigger = this.shadowRoot.querySelector('.select--trigger');
@@ -31,38 +29,50 @@ class RigelSelect extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['placeholder'];
+        return ['placeholder', 'options'];
     }
 
     connectedCallback() {
         // Configurar event listeners
         this.rigelSelectTrigger.addEventListener('click', this.toggleList);
-        this.addEventListener('click', this.handleOptionClick);
         document.addEventListener('click', this.handleClickOutside);
 
         // Configurar valor inicial
         const placeholder = this.getAttribute('placeholder') || 'Selecione uma opção';
         this.rigelSelectTrigger.textContent = placeholder;
 
-        // Processar options iniciais
-        this.processSlottedElements();
+        // Gerar opções iniciais
+        this.renderOptions();
     }
 
     disconnectedCallback() {
         this.rigelSelectTrigger.removeEventListener('click', this.toggleList);
-        this.removeEventListener('click', this.handleOptionClick);
         document.removeEventListener('click', this.handleClickOutside);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'placeholder' && this.rigelSelectTrigger) {
             this.rigelSelectTrigger.textContent = newValue;
+        } else if (name === 'options' && this.rigelSelectList) {
+            this.renderOptions();
         }
     }
 
     // Métodos definidos como arrow functions
     toggleList = () => {
         this.rigelSelectList.classList.toggle('open');
+
+        if (this.rigelSelectList.classList.contains('open')) {
+            this.rigelSelectTrigger.classList.add('active');
+        } else {
+            this.rigelSelectTrigger.classList.remove('active');
+        }
+    };
+
+    handleClickOutside = (event) => {
+        if (!this.contains(event.target)) {
+            this.rigelSelectList.classList.remove('open');
+        }
     };
 
     handleOptionClick = (event) => {
@@ -73,7 +83,8 @@ class RigelSelect extends HTMLElement {
 
             this.rigelSelectTrigger.textContent = text;
             this.setAttribute('value', value);
-            this.rigelSelectList.classList.remove('active');
+            this.rigelSelectList.classList.remove('open');
+            this.rigelSelectTrigger.classList.remove('active');
 
             // Disparar evento de mudança
             const changeEvent = new CustomEvent('change', {
@@ -85,23 +96,22 @@ class RigelSelect extends HTMLElement {
         }
     };
 
-    handleClickOutside(event) {
-        if (!this.contains(event.target)) {
-            this.rigelSelectList.classList.remove('active');
-        }
-    }
+    renderOptions() {
+        const optionsData = this.getAttribute('options');
+        const options = optionsData ? JSON.parse(optionsData) : [];
 
-    processSlottedElements() {
-        const slot = this.shadowRoot.querySelector('slot');
-        const elements = slot.assignedElements();
+        // Limpa a lista antes de renderizar
+        this.rigelSelectList.innerHTML = '';
 
-        elements.forEach(element => {
-            if (!element.classList.contains('select--option')) {
-                element.classList.add('select--option');
-            }
+        options.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.classList.add('select--option');
+            optionElement.setAttribute('data-value', option.value);
+            optionElement.textContent = option.label;
+            optionElement.addEventListener('click', this.handleOptionClick);
+            this.rigelSelectList.appendChild(optionElement);
         });
     }
-
 }
 
 // Registrar o componente

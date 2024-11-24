@@ -1,27 +1,29 @@
-@select_border: transparent;
+@select_border: black;
 @select_border_hover: #0048A3;
-@select_background: #000914;
-@select_list_background: #000914;
-@select_color: #9D9FA3;
+@select_background: #FFF;
+@select_list_background: #FFF;
+@select_color: black;
 @select_item_hover_color: #FFF;
 @select_item_hover_background: #0048A3;
 @select_font: sans-serif;
-@select_lineheight: 28px;
+@select_lineheight: 1;
 @select_radius: 6px;
 @select_width: 100%;
 @select_transition: all 0.25s linear;
 
-rigelwbc-select {
+.rigelwbc-select {
     position: relative;
+    width: @select_width;
 
     .select--trigger {
-        width: @select_width;
-        height: 100%;
+        max-width: @select_width;
+        height: initial;
         display: block;
         position: relative;
         z-index: 2;
-        background-image: url('../img/select-arrow.svg');
-        background-position: top 18px right 16px;
+        background-image: url('select-arrow.svg');
+        background-position: top 15px right 16px;
+        background-size: 20px 20px;
         background-repeat: no-repeat;
         border-radius: @select_radius;
         border: 1px solid @select_border;
@@ -40,6 +42,10 @@ rigelwbc-select {
 
         &:hover {
             border-color: @select_border_hover;
+        }
+
+        &.active {
+            background-image: url('select-arrow-open.svg');
         }
     }
 
@@ -64,22 +70,22 @@ rigelwbc-select {
             padding-left: 5px;
             padding-right: 5px;
             background-color: @select_list_background;
+        }
 
-            span {
-                cursor: pointer;
-                display: block;
-                color: @select_color;
-                font-family: @select_font;
-                font-size: 16px;
-                font-weight: 400;
-                line-height: normal;
-                padding: 3px 6px;
-                border-radius: 3px;
+        .select--option {
+            cursor: pointer;
+            display: block;
+            color: @select_color;
+            font-family: @select_font;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: normal;
+            padding: 3px 6px;
+            border-radius: 3px;
 
-                &:hover {
-                    background-color: @select_item_hover_background;
-                    color: @select_item_hover_color;
-                }
+            &:hover {
+                background-color: @select_item_hover_background;
+                color: @select_item_hover_color;
             }
         }
     }

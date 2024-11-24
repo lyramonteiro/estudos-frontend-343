@@ -1,41 +1,46 @@
-rigelwbc-select {
+.rigelwbc-select {
   position: relative;
-}
-rigelwbc-select .select--trigger {
   width: 100%;
-  height: 100%;
+}
+.rigelwbc-select .select--trigger {
+  max-width: 100%;
+  height: initial;
   display: block;
   position: relative;
   z-index: 2;
-  background-image: url('../img/select-arrow.svg');
-  background-position: top 18px right 16px;
+  background-image: url('select-arrow.svg');
+  background-position: top 15px right 16px;
+  background-size: 20px 20px;
   background-repeat: no-repeat;
   border-radius: 6px;
-  border: 1px solid transparent;
-  background-color: #000914;
+  border: 1px solid black;
+  background-color: #FFF;
   padding-top: 16px;
   padding-bottom: 16px;
   padding-left: 16px;
   padding-right: 42px;
-  color: #9D9FA3;
+  color: black;
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 400;
-  line-height: 28px;
+  line-height: 1;
   cursor: pointer;
   transition: all 0.25s linear;
 }
-rigelwbc-select .select--trigger:hover {
+.rigelwbc-select .select--trigger:hover {
   border-color: #0048A3;
 }
-rigelwbc-select .select--list {
+.rigelwbc-select .select--trigger.active {
+  background-image: url('select-arrow-open.svg');
+}
+.rigelwbc-select .select--list {
   display: none;
 }
-rigelwbc-select .select--list.open {
+.rigelwbc-select .select--list.open {
   width: fit-content;
   display: block;
   z-index: 1;
-  border: 1px solid transparent;
+  border: 1px solid black;
   position: absolute;
   bottom: 20px;
   right: -10px;
@@ -48,12 +53,12 @@ rigelwbc-select .select--list.open {
   padding-bottom: 16px;
   padding-left: 5px;
   padding-right: 5px;
-  background-color: #000914;
+  background-color: #FFF;
 }
-rigelwbc-select .select--list.open span {
+.rigelwbc-select .select--list .select--option {
   cursor: pointer;
   display: block;
-  color: #9D9FA3;
+  color: black;
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -61,7 +66,7 @@ rigelwbc-select .select--list.open span {
   padding: 3px 6px;
   border-radius: 3px;
 }
-rigelwbc-select .select--list.open span:hover {
+.rigelwbc-select .select--list .select--option:hover {
   background-color: #0048A3;
   color: #FFF;
 }
