@@ -22,6 +22,9 @@ class RigelSelect extends HTMLElement {
         </div>
         `;
 
+        // Adiciona o CSS ao Shadow DOM
+        this.shadowRoot.appendChild(link);
+
         // Elementos do componente
         this.rigelSelectTrigger = this.shadowRoot.querySelector('.select--trigger');
         this.rigelSelectList = this.shadowRoot.querySelector('.select--list');
